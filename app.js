@@ -56,6 +56,40 @@ app.delete('/envelopes/:envelopeId', (req, res) => {
     res.sendStatus(204)
 })
 
+app.post('/envelopes/:fromId/:toId', (req, res) => {
+    const { fromId, toId } = req.params
+    const budget = req.body.budget
+
+    // check if both envelopes exists
+    const fromIndex = envelopes.findIndex(env => env.id == fromId)
+    const toIndex = envelopes.findIndex(env => env.id == toId)
+    const fromEnv = envelopes[fromIndex]
+    const toEnv = envelopes[toIndex]
+
+    if (!fromEnv || !toEnv || Object.keys(fromEnv) == 0 || Object.keys(toEnv) == 0) {
+        res.status(404).send({ error: 'invlaid envelopes' })
+        return;
+    }
+
+    if (!(typeof (budget) == 'number')) {
+        res.status(400).send({ error: 'invalid budget' })
+        return;
+    }
+
+
+    if (fromEnv.balance < budget) {
+        res.status(400).send({ error: 'insufficient balance' })
+        return;
+    }
+
+
+    envelopes[fromIndex].balance -= budget;
+    envelopes[toIndex].balance += budget;
+
+    res.status(200).send({ success: 'budget transferred' })
+
+})
+
 app.listen(PORT, () => {
     console.log('Listening on http://localhost:' + PORT)
 })
