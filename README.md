@@ -17,13 +17,13 @@ This project is a Node.js/Express application that simulates a basic envelope bu
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/elhadjx/Personal-budget.git
+   git clone https://github.com/elhadjx/Personal-Budget.git
    ```
 
 2. Navigate into the project directory:
 
    ```bash
-   cd Personal-budget
+   cd Personal-Budget
    ```
 
 3. Install the dependencies:
