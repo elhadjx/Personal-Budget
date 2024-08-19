@@ -4,6 +4,7 @@ class Envelope {
         this.id = obj.id
         this.name = obj.name;
         this.limit = obj.limit
+        this.balance = obj.balance
     }
 }
 
@@ -24,7 +25,9 @@ function isValidEnvelope(obj) {
     if (
         isValidNum(obj.id) &&
         isValidNum(obj.limit) &&
-        isValidName(obj.name)) {
+        isValidName(obj.name) &&
+        isValidNum(obj.balance) &&
+        (obj.balance <= obj.limit)) {
         return true;
     }
     return false;
