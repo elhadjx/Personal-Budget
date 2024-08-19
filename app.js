@@ -50,6 +50,11 @@ app.put('/envelopes/:envelopeId', (req, res) => {
 
 })
 
+app.delete('/envelopes/:envelopeId', (req, res) => {
+    const { envelopeId } = req.params
+    envelopes.splice(envelopes.findIndex(env => env.id == envelopeId), 1)
+    res.sendStatus(204)
+})
 
 app.listen(PORT, () => {
     console.log('Listening on http://localhost:' + PORT)
