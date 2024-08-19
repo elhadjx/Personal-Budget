@@ -1,6 +1,7 @@
 class Envelope {
     constructor(obj) {
         if (!isValidEnvelope(obj)) return null;
+        this.id = obj.id
         this.name = obj.name;
         this.limit = obj.limit
     }
@@ -21,6 +22,7 @@ function isValidName(param) {
 
 function isValidEnvelope(obj) {
     if (
+        isValidNum(obj.id) &&
         isValidNum(obj.limit) &&
         isValidName(obj.name)) {
         return true;

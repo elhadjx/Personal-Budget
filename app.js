@@ -1,5 +1,6 @@
 const express = require('express');
-const Envelope = require('./models/Envelope')
+const Envelope = require('./models/Envelope');
+const e = require('express');
 const app = express()
 const PORT = 4055
 
@@ -16,7 +17,14 @@ app.get('/envelopes', (req, res) => {
     res.send(envelopes)
 })
 
+app.get('/envelopes/:envelopeId', (req, res) => {
+    const { envelopeId } = req.params
+    const envelope = envelopes.filter(env => env.id == envelopeId)[0]
+    res.send(envelope)
+})
+
 app.post('/envelopes', (req, res) => {
+    req.body.id = envelopes.length + 1
     const envelope = new Envelope(req.body)
     if (!envelope || Object.keys(envelope) == 0) {
         res.status(400).send({ error: 'invalid envelope' })
