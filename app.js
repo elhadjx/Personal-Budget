@@ -1,6 +1,5 @@
 const express = require('express');
 const Envelope = require('./models/Envelope');
-const e = require('express');
 const app = express()
 const PORT = 4055
 
@@ -8,6 +7,16 @@ let envelopes = []
 
 app.use(express.json())
 
+app.param('envelopeId', (req, res, next, id) => {
+    let f_index = envelopes.findIndex(env => env.id == id);
+    if (f_index < 0) {
+        res.status(404).send({ error: 'envelope not found' })
+        return;
+    }
+    req.envelopeId = id
+    req.envelopeIndex = f_index
+    next()
+})
 
 app.get('/', (req, res) => {
     res.send('ok')
@@ -30,29 +39,25 @@ app.post('/envelopes', (req, res) => {
 })
 
 app.get('/envelopes/:envelopeId', (req, res) => {
-    const { envelopeId } = req.params
-    const envelope = envelopes.filter(env => env.id == envelopeId)[0]
+    const envelope = envelopes.filter(env => env.id == req.envelopeId)[0]
     res.send(envelope)
 })
 
 app.put('/envelopes/:envelopeId', (req, res) => {
-    const { envelopeId } = req.params
-    const e_index = envelopes.findIndex(env => env.id == envelopeId)
-    const upd_env = { ...envelopes[e_index], ...req.body }
+    const upd_env = { ...envelopes[req.envelopeIndex], ...req.body }
     // check if it's is a valid env by creating a new envelope
     const new_env = new Envelope(upd_env)
     if (!new_env || Object.keys(new_env) == 0) {
         res.status(400).send({ error: 'invalid envelope' })
         return;
     }
-    envelopes[e_index] = upd_env;
+    envelopes[req.envelopeIndex] = upd_env;
     res.status(201).send(upd_env)
 
 })
 
 app.delete('/envelopes/:envelopeId', (req, res) => {
-    const { envelopeId } = req.params
-    envelopes.splice(envelopes.findIndex(env => env.id == envelopeId), 1)
+    envelopes.splice(envelopes.findIndex(env => env.id == req.envelopeId), 1)
     res.sendStatus(204)
 })
 
