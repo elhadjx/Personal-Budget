@@ -1,7 +1,7 @@
 const express = require('express');
 const Envelope = require('./models/Envelope');
 const app = express()
-const PORT = 4055
+const PORT = 4055 // env
 
 let envelopes = []
 
